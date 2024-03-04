@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  wearable_rotary: ^2.0.0
+  wearable_rotary: ^2.0.2
   vibration: ^1.7.6
 
 dev_dependencies:
