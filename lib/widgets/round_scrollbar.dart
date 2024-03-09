@@ -79,11 +79,17 @@ class _RoundScrollbarState extends State<RoundScrollbar> {
 
     _currentHideUpdate++;
     final thisUpdate = _currentHideUpdate;
+
     Future.delayed(
       widget.autoHideDuration,
       () {
         if (thisUpdate != _currentHideUpdate) return;
-        setState(() => _isScrollBarVisible = false);
+
+        if (mounted) {
+          setState(() {
+            _isScrollBarVisible = false;
+          });
+        }
       },
     );
   }
@@ -100,10 +106,13 @@ class _RoundScrollbarState extends State<RoundScrollbar> {
 
   @override
   void initState() {
-    widget.controller.addListener(_onScrolled);
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _updateScrollValues());
-    WidgetsBinding.instance.addPostFrameCallback((_) => _hideAfterDelay());
+
+    widget.controller.addListener(_onScrolled);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updateScrollValues();
+      _hideAfterDelay();
+    });
   }
 
   @override
