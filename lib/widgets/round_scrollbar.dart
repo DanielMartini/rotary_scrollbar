@@ -118,8 +118,7 @@ class RoundScrollbar extends StatefulWidget {
   State<StatefulWidget> createState() => _RoundScrollbarState();
 }
 
-class _RoundScrollbarState extends State<RoundScrollbar>
-    with SingleTickerProviderStateMixin {
+class _RoundScrollbarState extends State<RoundScrollbar> with SingleTickerProviderStateMixin {
   ScrollController? _currentController;
 
   late final _RoundProgressBarPainter _painter;
@@ -131,9 +130,7 @@ class _RoundScrollbarState extends State<RoundScrollbar>
 
   void _onScroll() {
     final controller = _currentController;
-    if (controller == null ||
-        !controller.position.hasViewportDimension ||
-        controller.position.extentInside == controller.position.extentTotal) {
+    if (controller == null || !controller.position.hasViewportDimension || controller.position.extentInside == controller.position.extentTotal) {
       return;
     }
     _updateScrollbarPainter(controller);
@@ -156,10 +153,7 @@ class _RoundScrollbarState extends State<RoundScrollbar>
   }
 
   void _updateScrollbarPainter(ScrollController controller) {
-    final thumbFraction = 1 /
-        ((controller.position.maxScrollExtent /
-                controller.position.viewportDimension) +
-            1);
+    final thumbFraction = 1 / ((controller.position.maxScrollExtent / controller.position.viewportDimension) + 1);
     final index = (controller.offset / controller.position.viewportDimension);
 
     _painter.updateThumb(index, thumbFraction);
@@ -169,7 +163,7 @@ class _RoundScrollbarState extends State<RoundScrollbar>
     _fadeOutTimer?.cancel();
     if (!widget.autoHide) return;
     _fadeOutTimer = Timer(widget.autoHideDuration, () {
-      _opacityController.reverse();
+      _opacityController?.reverse();
       _fadeOutTimer = null;
     });
   }
@@ -183,8 +177,7 @@ class _RoundScrollbarState extends State<RoundScrollbar>
     if (oldWidget.opacityAnimationDuration != widget.opacityAnimationDuration) {
       _opacityController.duration = widget.opacityAnimationDuration;
     }
-    if (oldWidget.thumbColor != widget.thumbColor ||
-        oldWidget.trackColor != widget.trackColor) {
+    if (oldWidget.thumbColor != widget.thumbColor || oldWidget.trackColor != widget.trackColor) {
       _updatePainter();
     }
   }
@@ -226,18 +219,13 @@ class _RoundScrollbarState extends State<RoundScrollbar>
 
   void _updatePainter() {
     _painter
-      ..track.color = widget.trackColor ??
-          ScrollbarTheme.of(context).trackColor?.resolve(<WidgetState>{}) ??
-          Theme.of(context).highlightColor
-      ..thumb.color = widget.thumbColor ??
-          ScrollbarTheme.of(context).thumbColor?.resolve(<WidgetState>{}) ??
-          Theme.of(context).highlightColor.withAlpha(255);
+      ..track.color = widget.trackColor ?? ScrollbarTheme.of(context).trackColor?.resolve(<WidgetState>{}) ?? Theme.of(context).highlightColor
+      ..thumb.color = widget.thumbColor ?? ScrollbarTheme.of(context).thumbColor?.resolve(<WidgetState>{}) ?? Theme.of(context).highlightColor.withAlpha(255);
   }
 
   void _updateController() {
     _currentController?.removeListener(_onScroll);
-    _currentController =
-        widget.controller ?? PrimaryScrollController.of(context);
+    _currentController = widget.controller ?? PrimaryScrollController.of(context);
     _currentController?.addListener(_onScroll);
   }
 
@@ -285,9 +273,7 @@ class _RoundProgressBarPart {
   });
 
   bool shouldRepaint(covariant _RoundProgressBarPart oldProps) {
-    return startAngle != oldProps.startAngle ||
-        length != oldProps.length ||
-        color != oldProps.color;
+    return startAngle != oldProps.startAngle || length != oldProps.length || color != oldProps.color;
   }
 }
 
@@ -360,8 +346,7 @@ class _RoundProgressBarPainter extends ChangeNotifier implements CustomPainter {
     required double opacity,
   }) {
     final paint = Paint()
-      ..color = part.color?.withValues(alpha: part.color!.a * opacity) ??
-          const Color(0x00000000)
+      ..color = part.color?.withValues(alpha: part.color!.a * opacity) ?? const Color(0x00000000)
       ..strokeWidth = trackWidth.toDouble()
       ..style = PaintingStyle.stroke
       ..strokeCap = StrokeCap.round;
@@ -393,8 +378,7 @@ class _RoundProgressBarPainter extends ChangeNotifier implements CustomPainter {
 
   @override
   bool shouldRepaint(covariant _RoundProgressBarPainter oldDelegate) {
-    return thumb.shouldRepaint(oldDelegate.thumb) ||
-        track.shouldRepaint(oldDelegate.track);
+    return thumb.shouldRepaint(oldDelegate.thumb) || track.shouldRepaint(oldDelegate.track);
   }
 
   @override
