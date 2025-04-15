@@ -124,6 +124,7 @@ class _RoundScrollbarState extends State<RoundScrollbar> with SingleTickerProvid
   late final _RoundProgressBarPainter _painter;
 
   late final AnimationController _opacityController;
+  bool _opacityControllerIsDisposed = false;
 
   late final Animation<double> _opacityAnimation;
   Timer? _fadeOutTimer;
@@ -163,7 +164,10 @@ class _RoundScrollbarState extends State<RoundScrollbar> with SingleTickerProvid
     _fadeOutTimer?.cancel();
     if (!widget.autoHide) return;
     _fadeOutTimer = Timer(widget.autoHideDuration, () {
-      _opacityController?.reverse();
+      if (!_opacityControllerIsDisposed) {
+        _opacityController?.reverse();
+      }
+
       _fadeOutTimer = null;
     });
   }
@@ -186,6 +190,7 @@ class _RoundScrollbarState extends State<RoundScrollbar> with SingleTickerProvid
   void initState() {
     super.initState();
     _currentController?.addListener(_onScroll);
+    _opacityControllerIsDisposed = false;
     _opacityController = AnimationController(
       value: 0,
       vsync: this,
@@ -232,6 +237,7 @@ class _RoundScrollbarState extends State<RoundScrollbar> with SingleTickerProvid
   @override
   void dispose() {
     _currentController?.removeListener(_onScroll);
+    _opacityControllerIsDisposed = true;
     _opacityController.dispose();
     super.dispose();
   }
